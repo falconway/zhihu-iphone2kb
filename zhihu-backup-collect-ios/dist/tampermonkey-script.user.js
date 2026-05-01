@@ -5181,22 +5181,27 @@ const isIOS = () => {
         return true;
     return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 };
+function openBlobUrl(blob) {
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
 async function iosAwareSave(blob, filename, mime) {
     if (isIOS()) {
+        const nav = navigator;
         try {
             const file = new File([blob], filename, { type: mime || blob.type || "application/octet-stream" });
-            const nav = navigator;
             if (nav.canShare && nav.canShare({ files: [file] })) {
                 await nav.share({ files: [file], title: filename });
                 return;
             }
-            const url = URL.createObjectURL(blob);
-            window.open(url, "_blank");
-            setTimeout(() => URL.revokeObjectURL(url), 60000);
+            openBlobUrl(blob);
             return;
         }
         catch (e) {
-            console.warn("iosAwareSave share failed, falling back", e);
+            console.warn("iosAwareSave share failed, falling back to blob URL", e);
+            openBlobUrl(blob);
+            return;
         }
     }
     (0,FileSaver_min.saveAs)(blob, filename);

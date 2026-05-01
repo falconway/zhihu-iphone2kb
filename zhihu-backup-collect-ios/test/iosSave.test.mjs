@@ -111,7 +111,7 @@ test("iPhone UA + canShare(false) → falls back to window.open(blobUrl)", async
     assert.equal(saveAsSpy.mock.callCount(), 0)
 })
 
-test("iPhone UA + share() throws → falls through to saveAs (desktop fallback)", async () => {
+test("iPhone UA + share() throws → falls back to window.open(blobUrl)", async () => {
     setNavigator({
         ua: IPHONE_UA,
         canShare: () => true,
@@ -122,7 +122,9 @@ test("iPhone UA + share() throws → falls through to saveAs (desktop fallback)"
 
     await iosAwareSave(new Blob(["x"]), "thrown.md", "text/plain")
 
-    assert.equal(saveAsSpy.mock.callCount(), 1, "should fall through to saveAs after share rejects")
+    assert.equal(openedUrls.length, 1)
+    assert.match(openedUrls[0], /^blob:/)
+    assert.equal(saveAsSpy.mock.callCount(), 0, "iOS share failure should not fall through to desktop saveAs")
 })
 
 test("Desktop UA → calls saveAs and never touches share / window.open", async () => {
