@@ -8,6 +8,7 @@
     "build:production": "webpack --mode production",
     "build:tampermonkey": "node ./scripts/build-tampermonkey.js",
     "build": "run-s build:production build:tampermonkey",
+    "test": "node --test --experimental-test-module-mocks --experimental-strip-types --no-warnings 'test/*.test.mjs'",
     "lint": "eslint --fix --ext .js,.ts ./src ./scripts webpack.config.js"
   },
   "devDependencies": {
