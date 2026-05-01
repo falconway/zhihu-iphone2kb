@@ -1,0 +1,12 @@
+# Vendored upstream — kept locally as a reference clone, not tracked here.
+# To re-sync: cd zhihu-backup-collect && git pull
+zhihu-backup-collect/
+
+# Node
+zhihu-backup-collect-ios/node_modules/
+
+# OS / editor
+.DS_Store
+*.swp
+.vscode/
+.idea/
