@@ -32,7 +32,7 @@ ${readme}
 `, "utf-8")
 
 //?(?=(##)?)
-fs.writeFileSync("./dist/tampermonkey-script.js", `// ==UserScript==
+fs.writeFileSync("./dist/tampermonkey-script.user.js", `// ==UserScript==
 ${TampermonkeyConfig}
 // ==/UserScript==
 

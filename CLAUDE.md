@@ -23,12 +23,12 @@ The original repo expected `pnpm`; this fork uses npm with `--legacy-peer-deps` 
 
 ```bash
 npm install --legacy-peer-deps      # one-time
-npm run build                        # webpack production + assemble dist/tampermonkey-script.js
+npm run build                        # webpack production + assemble dist/tampermonkey-script.user.js
 npm run dev                          # webpack --watch (development bundle)
 npm run lint
 ```
 
-Build output: `dist/tampermonkey-script.js` is the artifact users paste into Tampermonkey/Userscripts. `dist/bundle.min.js` is the webpack output that `scripts/build-tampermonkey.js` wraps with the `==UserScript==` header. Both are committed.
+Build output: `dist/tampermonkey-script.user.js` is the user-facing artifact. The `.user.js` suffix is **mandatory** — both desktop Tampermonkey and Tampermonkey/Userscripts on iOS only show the install prompt when navigating to a URL whose path ends in `.user.js`. Renaming this file (or the `@updateURL`/`@downloadURL` it points at) breaks one-click install. `dist/bundle.min.js` is the webpack output that `scripts/build-tampermonkey.js` wraps with the `==UserScript==` header.
 
 There is **no test framework** wired up. If asked to add tests, use Node's built-in `node --test` runner before reaching for Jest/Vitest — keeps the dep tree clean.
 
@@ -62,4 +62,4 @@ When `navigator.share` is invoked it MUST be inside the synchronous user-gesture
 - Scraping/parsing bug? Likely upstream's problem. Check if upstream fixed it (`cd zhihu-backup-collect && git log --since=...`) before patching locally.
 - Save-path bug? That's our patch surface — `iosSave.ts` and the three call sites in `index.ts`.
 - Don't add the iOS save logic to `obsidianSaver.ts`; that whole module is gated on `showDirectoryPicker` and stays inert on iOS by design.
-- Verify after build: `grep -c "canShare\|navigator\.share" zhihu-backup-collect-ios/dist/tampermonkey-script.js` should return ≥ 2, confirming the share API survived minification.
+- Verify after build: `grep -c "canShare\|navigator\.share" zhihu-backup-collect-ios/dist/tampermonkey-script.user.js` should return ≥ 2, confirming the share API survived minification.
