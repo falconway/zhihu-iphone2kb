@@ -8,9 +8,12 @@ export const UserScriptContent = fs.readFileSync("./dist/bundle.min.js", "utf-8"
 export const UserScript = {
     "name": "知乎备份剪藏 (iOS)",
     "namespace": "qtqz-ios",
-    "source": "https://github.com/qtqz/zhihu-backup-collect",
+    "source": "https://github.com/falconway/zhihu-iphone2kb",
     "version": packageInfo.version,
     "description": "iOS-adapted: 将你喜欢的知乎回答/文章/想法保存为 markdown / zip / png（通过分享单到「文件」）",
+    "updateURL": "https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.js",
+    "downloadURL": "https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.js",
+    "supportURL": "https://github.com/falconway/zhihu-iphone2kb/issues",
     "author": packageInfo.author,
     "match": [
         "https:\/\/www.zhihu.com/follow",
