@@ -11,8 +11,8 @@ export const UserScript = {
     "source": "https://github.com/falconway/zhihu-iphone2kb",
     "version": packageInfo.version,
     "description": "iOS-adapted: 将你喜欢的知乎回答/文章/想法保存为 markdown / zip / png（通过分享单到「文件」）",
-    "updateURL": "https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.js",
-    "downloadURL": "https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.js",
+    "updateURL": "https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.user.js",
+    "downloadURL": "https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.user.js",
     "supportURL": "https://github.com/falconway/zhihu-iphone2kb/issues",
     "author": packageInfo.author,
     "match": [

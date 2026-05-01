@@ -2,10 +2,10 @@
 // @name         知乎备份剪藏 (iOS)
 // @namespace    qtqz-ios
 // @source       https://github.com/falconway/zhihu-iphone2kb
-// @version      0.11.6-ios.2
+// @version      0.11.6-ios.3
 // @description  iOS-adapted: 将你喜欢的知乎回答/文章/想法保存为 markdown / zip / png（通过分享单到「文件」）
-// @updateURL    https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.js
-// @downloadURL  https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.js
+// @updateURL    https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.user.js
+// @downloadURL  https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.user.js
 // @supportURL   https://github.com/falconway/zhihu-iphone2kb/issues
 // @author       qtqz
 // @match        https://www.zhihu.com/follow
