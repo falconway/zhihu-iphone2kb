@@ -7,15 +7,13 @@ import * as JSZip from "jszip"
  * @returns 添加了下载文件的zip文件
  */
 export async function downloadAndZip(url: string, zip: JSZip): Promise<{ zip: JSZip, file_name: string }> {
-    console.info("[ZhihuBackup][ZIP] Fetch asset:", url)
     const response = await fetch(url)
     if (!response.ok) {
-        throw new Error(`[ZhihuBackup][ZIP] Asset fetch failed: ${response.status} ${response.statusText} ${url}`)
+        throw new Error(`Asset fetch failed: ${response.status} ${response.statusText} ${url}`)
     }
     const arrayBuffer = await response.arrayBuffer()
     let fileName = url.replace(/\?.*?$/g, "").split("/").pop()
     fileName.endsWith('.image') ? fileName += '.jpg' : 0
-    console.info("[ZhihuBackup][ZIP] Asset fetched:", fileName)
 
     // 添加到zip文件
     zip.file(fileName, arrayBuffer)

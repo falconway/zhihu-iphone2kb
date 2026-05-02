@@ -2,7 +2,7 @@
 // @name         知乎备份剪藏 (iOS)
 // @namespace    qtqz-ios
 // @source       https://github.com/falconway/zhihu-iphone2kb
-// @version      0.11.6-ios.5
+// @version      0.11.6-ios.6
 // @description  iOS-adapted: 将你喜欢的知乎回答/文章/想法保存为 markdown / zip / png（通过分享单到「文件」）
 // @updateURL    https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.user.js
 // @downloadURL  https://raw.githubusercontent.com/falconway/zhihu-iphone2kb/main/zhihu-backup-collect-ios/dist/tampermonkey-script.user.js
@@ -1968,15 +1968,13 @@ var tokenTypes = __webpack_require__(239);
  * @returns 添加了下载文件的zip文件
  */
 async function downloadAndZip(url, zip) {
-    console.info("[ZhihuBackup][ZIP] Fetch asset:", url);
     const response = await fetch(url);
     if (!response.ok) {
-        throw new Error(`[ZhihuBackup][ZIP] Asset fetch failed: ${response.status} ${response.statusText} ${url}`);
+        throw new Error(`Asset fetch failed: ${response.status} ${response.statusText} ${url}`);
     }
     const arrayBuffer = await response.arrayBuffer();
     let fileName = url.replace(/\?.*?$/g, "").split("/").pop();
     fileName.endsWith('.image') ? fileName += '.jpg' : 0;
-    console.info("[ZhihuBackup][ZIP] Asset fetched:", fileName);
     // 添加到zip文件
     zip.file(fileName, arrayBuffer);
     return { zip, file_name: fileName };
@@ -2014,7 +2012,6 @@ async function downloadAndZipAll(urls, zip) {
                     case tokenTypes/* TokenType */.k.Figure:
                     case tokenTypes/* TokenType */.k.Video:
                     case tokenTypes/* TokenType */.k.Gif: {
-                        console.info("[ZhihuBackup][ZIP] Queue asset:", token.src);
                         const { file_name } = await downloadAndZip(token.src, assetsFolder);
                         token.localSrc = `./${assetsPath}/${file_name}`;
                         token.local = true;
@@ -2023,7 +2020,7 @@ async function downloadAndZipAll(urls, zip) {
                 }
             }
             catch (e) {
-                console.error("[ZhihuBackup][ZIP] Asset download failed", token, e);
+                console.error('下载', token, e);
                 alert('下载失败：' + token.type + '\n' + token.src);
             }
         }
@@ -2794,15 +2791,13 @@ function detectType(dom, bt, ev) {
                         if (commentsImgs.length) {
                             const assetsFolder = zip.folder('assets');
                             for (let i = 0; i < commentsImgs.length; i++) {
-                                console.info("[ZhihuBackup][ZIP] Fetch comment image:", commentsImgs[i]);
                                 const response = await fetch(commentsImgs[i]);
                                 if (!response.ok) {
-                                    throw new Error(`[ZhihuBackup][ZIP] Comment image fetch failed: ${response.status} ${response.statusText} ${commentsImgs[i]}`);
+                                    throw new Error(`Comment image fetch failed: ${response.status} ${response.statusText} ${commentsImgs[i]}`);
                                 }
                                 const arrayBuffer = await response.arrayBuffer();
                                 const fileName = commentsImgs[i].replace(/\?.*?$/, "").split("/").pop();
                                 assetsFolder.file(fileName, arrayBuffer);
-                                console.info("[ZhihuBackup][ZIP] Comment image fetched:", fileName);
                             }
                         }
                     }
@@ -2810,7 +2805,7 @@ function detectType(dom, bt, ev) {
             }
         }
         catch (e) {
-            console.warn("[ZhihuBackup][ZIP] Comment handling failed:", e);
+            console.warn("评论:", e);
             alert('主要工作已完成，但是评论保存出错了');
         }
     };
@@ -2857,7 +2852,6 @@ function detectType(dom, bt, ev) {
         };
     }
     if (button == 'zip') {
-        console.info("[ZhihuBackup][ZIP] Start building ZIP:", title);
         //对lex的再处理，保存资产，并将lex中链接改为本地
         var { zip, localLex } = await (0,_core_savelex__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .A)(lex);
         if (await dealComments() == 'return')
@@ -2888,7 +2882,6 @@ function detectType(dom, bt, ev) {
         else if (commentText)
             zip.file("comments.md", commentText);
         zip.file("index.md", getFrontmatter() + (TOC ? TOC.join("\n\n") + '\n\n' : '') + md.join("\n\n"));
-        console.info("[ZhihuBackup][ZIP] ZIP assembled:", title);
     }
     return {
         zip,
@@ -5196,7 +5189,6 @@ const isIOS = () => {
 };
 function openBlobUrl(blob) {
     const url = URL.createObjectURL(blob);
-    console.info("[ZhihuBackup][iOSSave] Open blob URL fallback");
     window.open(url, "_blank");
     setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
@@ -5206,11 +5198,9 @@ async function iosAwareSave(blob, filename, mime) {
         try {
             const file = new File([blob], filename, { type: mime || blob.type || "application/octet-stream" });
             if (nav.canShare && nav.canShare({ files: [file] })) {
-                console.info("[ZhihuBackup][iOSSave] navigator.share:", filename, file.type, file.size);
                 await nav.share({ files: [file], title: filename });
                 return;
             }
-            console.warn("[ZhihuBackup][iOSSave] navigator.canShare returned false, using blob fallback:", filename);
             openBlobUrl(blob);
             return;
         }
@@ -5421,9 +5411,7 @@ const main = async () => {
                         zip: res.zip,
                         title: res.title,
                     };
-                    console.info("[ZhihuBackup][ZIP] Generating blob:", result.title);
                     const blob = await result.zip.generateAsync({ type: "blob" });
-                    console.info("[ZhihuBackup][ZIP] Blob generated:", result.title, blob.size);
                     await iosAwareSave(blob, result.title + ".zip", "application/zip");
                     ButtonZip.innerHTML = "下载成功✅<br>请看下载记录";
                     setTimeout(() => {
@@ -5431,7 +5419,7 @@ const main = async () => {
                     }, 5000);
                 }
                 catch (e) {
-                    console.error("[ZhihuBackup][ZIP] Save failed:", e);
+                    console.log(e);
                     ButtonZip.innerHTML = "发生错误❌<br>请打开控制台查看";
                     setTimeout(() => {
                         ButtonZip.innerHTML = "下载为 ZIP";

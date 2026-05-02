@@ -8,7 +8,6 @@ const isIOS = (): boolean => {
 
 function openBlobUrl(blob: Blob): void {
     const url = URL.createObjectURL(blob)
-    console.info("[ZhihuBackup][iOSSave] Open blob URL fallback")
     window.open(url, "_blank")
     setTimeout(() => URL.revokeObjectURL(url), 60_000)
 }
@@ -19,11 +18,9 @@ export async function iosAwareSave(blob: Blob, filename: string, mime?: string):
         try {
             const file = new File([blob], filename, { type: mime || blob.type || "application/octet-stream" })
             if (nav.canShare && nav.canShare({ files: [file] })) {
-                console.info("[ZhihuBackup][iOSSave] navigator.share:", filename, file.type, file.size)
                 await nav.share({ files: [file], title: filename })
                 return
             }
-            console.warn("[ZhihuBackup][iOSSave] navigator.canShare returned false, using blob fallback:", filename)
             openBlobUrl(blob)
             return
         } catch (e) {
