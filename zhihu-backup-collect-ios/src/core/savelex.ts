@@ -26,6 +26,7 @@ export default async (
                     case TokenType.Figure:
                     case TokenType.Video:
                     case TokenType.Gif: {
+                        console.info("[ZhihuBackup][ZIP] Queue asset:", token.src)
                         const { file_name } = await downloadAndZip(token.src, assetsFolder)
                         token.localSrc = `./${assetsPath}/${file_name}`
                         token.local = true
@@ -33,8 +34,8 @@ export default async (
                     }
                 }
             } catch (e) {
-                console.error('下载', token, e)
-                alert('下载失败' + token.type + e)
+                console.error("[ZhihuBackup][ZIP] Asset download failed", token, e)
+                alert('下载失败：' + token.type + '\n' + token.src)
             }
         }
     }

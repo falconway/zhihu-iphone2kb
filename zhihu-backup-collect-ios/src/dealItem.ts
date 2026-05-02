@@ -295,17 +295,22 @@ export default async (dom: HTMLElement, button?: string, event?: Event): Promise
                         if (commentsImgs.length) {
                             const assetsFolder = zip.folder('assets')
                             for (let i = 0; i < commentsImgs.length; i++) {
+                                console.info("[ZhihuBackup][ZIP] Fetch comment image:", commentsImgs[i])
                                 const response = await fetch(commentsImgs[i])
+                                if (!response.ok) {
+                                    throw new Error(`[ZhihuBackup][ZIP] Comment image fetch failed: ${response.status} ${response.statusText} ${commentsImgs[i]}`)
+                                }
                                 const arrayBuffer = await response.arrayBuffer()
                                 const fileName = commentsImgs[i].replace(/\?.*?$/, "").split("/").pop()
                                 assetsFolder.file(fileName, arrayBuffer)
+                                console.info("[ZhihuBackup][ZIP] Comment image fetched:", fileName)
                             }
                         }
                     }
                 }
             }
         } catch (e) {
-            console.warn("评论:", e)
+            console.warn("[ZhihuBackup][ZIP] Comment handling failed:", e)
             alert('主要工作已完成，但是评论保存出错了')
         }
     }
@@ -353,6 +358,7 @@ export default async (dom: HTMLElement, button?: string, event?: Event): Promise
     }
 
     if (button == 'zip') {
+        console.info("[ZhihuBackup][ZIP] Start building ZIP:", title)
         //对lex的再处理，保存资产，并将lex中链接改为本地
         var { zip, localLex } = await savelex(lex)
         if (await dealComments() == 'return') return;
@@ -383,6 +389,7 @@ export default async (dom: HTMLElement, button?: string, event?: Event): Promise
             zip.file("comments.md", commentText)
 
         zip.file("index.md", getFrontmatter() + (TOC ? TOC.join("\n\n") + '\n\n' : '') + md.join("\n\n"))
+        console.info("[ZhihuBackup][ZIP] ZIP assembled:", title)
     }
 
     return {

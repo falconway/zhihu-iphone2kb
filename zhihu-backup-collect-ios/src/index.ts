@@ -208,14 +208,16 @@ const main = async () => {
                         zip: res.zip,
                         title: res.title,
                     }
+                    console.info("[ZhihuBackup][ZIP] Generating blob:", result.title)
                     const blob = await result.zip.generateAsync({ type: "blob" })
+                    console.info("[ZhihuBackup][ZIP] Blob generated:", result.title, blob.size)
                     await iosAwareSave(blob, result.title + ".zip", "application/zip")
                     ButtonZip.innerHTML = "下载成功✅<br>请看下载记录"
                     setTimeout(() => {
                         ButtonZip.innerHTML = "下载为 ZIP"
                     }, 5000)
                 } catch (e) {
-                    console.log(e)
+                    console.error("[ZhihuBackup][ZIP] Save failed:", e)
                     ButtonZip.innerHTML = "发生错误❌<br>请打开控制台查看"
                     setTimeout(() => {
                         ButtonZip.innerHTML = "下载为 ZIP"

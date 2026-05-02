@@ -1,6 +1,6 @@
 {
   "name": "zhihu-backup-collect-ios",
-  "version": "0.11.6-ios.4",
+  "version": "0.11.6-ios.5",
   "description": "iOS-adapted: 将你喜欢的知乎回答/文章/想法保存为 markdown / zip / png（iPhone share sheet → Files）",
   "scripts": {
     "dev": "run-s watch",
